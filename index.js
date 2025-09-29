@@ -1,11 +1,13 @@
 const express = require('express');
-const fetch = require('node-fetch');  // ใช้ v2.x เท่านั้น
+const fetch = require('node-fetch');  // v2.x
 const cors = require('cors');
 const port = process.env.PORT || 3000;
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use(express.static('public'));
 
 app.post('/homework', async (req, res) => {
   try {
@@ -28,8 +30,4 @@ app.post('/homework', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
-});
-
-app.get('/', (req, res) => {
-  res.send('Hello World!');
 });
