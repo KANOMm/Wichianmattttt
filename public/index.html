@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HOMEWORK I WICHAINMAT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    .fade-out {
+      animation: fadeOut 0.4s ease-out forwards;
+    }
+    @keyframes fadeOut {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.98); }
+    }
+    @font-face {
+      font-family: 'Chula';
+      src: url('../Website/Font/Chula-Fonts/Chula-Regular.ttf') format('truetype');
+    }
+    body {
+      font-family: 'Chula', sans-serif;
+    }
+    .scrambled-text {
+      display: inline-block;
+      font-size: 35px;
+      font-weight: bold;
+      color: #fbbf24;
+    }
+    .expand-button {
+      transition: all 0.3s ease;
+    }
+    .expand-button:hover {
+      background-color: white;
+      color: #fbbf24;
+      border: 2px solid #fbbf24;
+      transform: scale(1.05);
+    }
+    .input-style {
+      transition: all 0.2s ease;
+    }
+    .input-style:hover {
+      border-color: #fbbf24;
+      transform: scale(1.02);
+    }
+    .input-style:focus {
+      transform: scale(1.02);
+    }
+  </style>
+</head>
+<body class="bg-yellow-50 flex items-center justify-center min-h-screen p-4">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+    <h1 id="scrambled-text" class="scrambled-text text-center mb-6">WICHAINMAT!!!!</h1>
+    <form id="homework-form" class="space-y-4">
+      <div class="group">
+        <label class="block text-sm text-gray-700 mb-1 transition-all duration-200 group-hover:font-bold group-hover:text-base">วิชา</label>
+        <select id="subject" required
+                class="input-style w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400">
+          <option value="" disabled selected>เลือกวิชา</option>
+          <option value="🧮คณิตศาสตร์">🧮คณิตศาสตร์</option>
+          <option value="🍎ฟิสิกส์">🍎ฟิสิกส์</option>
+          <option value="🧪เคมี">🧪เคมี</option>
+          <option value="🧫ชีวะวิทยา">🧫ชีวะวิทยา</option>
+          <option value="🇬🇧ภาษาอังกฤษ">🇬🇧ภาษาอังกฤษ</option>
+          <option value="🌎สังคมศึกษา">🌎สังคมศึกษา</option>
+        </select>
+      </div>
+
+      <div class="group">
+        <label class="block text-sm text-gray-700 mb-1 transition-all duration-200 group-hover:font-bold group-hover:text-base">ประเภทงาน</label>
+        <select id="type" required
+                class="input-style w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400">
+          <option value="" disabled selected>เลือกประเภทงาน</option>
+          <option value="รายงาน">รายงาน</option>
+          <option value="พรีเซ้น">พรีเซ้น</option>
+          <option value="การบ้าน">การบ้าน</option>
+        </select>
+      </div>
+
+      <div class="group">
+        <label class="block text-sm text-gray-700 mb-1 transition-all duration-200 group-hover:font-bold group-hover:text-base">รายละเอียด</label>
+        <textarea id="description" rows="4" placeholder="กรอกรายละเอียดงาน" required
+          class="input-style w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 resize-none"></textarea>
+      </div>
+
+      <div class="group">
+        <label class="block text-sm text-gray-700 mb-1 transition-all duration-200 group-hover:font-bold group-hover:text-base">วันส่ง</label>
+        <input id="dueDate" type="date" required
+          class="input-style w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+      </div>
+
+      <button type="submit" class="expand-button w-full bg-yellow-500 text-white py-2 rounded-md">
+        ส่งข้อมูล
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const originalText = 'WICHAINMAT!!!!';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
+    const textElement = document.getElementById('scrambled-text');
+    let currentLength = 0;
+
+    function scrambleText() {
+      let scrambled = '';
+      for (let i = 0; i < originalText.length; i++) {
+        if (i < currentLength) {
+          scrambled += originalText[i];
+        } else {
+          scrambled += characters[Math.floor(Math.random() * characters.length)];
+        }
+      }
+      textElement.textContent = scrambled;
+    }
+
+    function revealText() {
+      if (currentLength < originalText.length) {
+        scrambleText();
+        currentLength++;
+        setTimeout(revealText, 50);
+      } else {
+        textElement.textContent = originalText;
+      }
+    }
+
+    window.onload = revealText;
+
+    document.getElementById('homework-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const subject = document.getElementById('subject').value;
+  const type = document.getElementById('type').value;
+  const description = document.getElementById('description').value;
+  const dueDate = document.getElementById('dueDate').value;
+  const button = e.target.querySelector('button');
+
+  if (!subject || !type || !description || !dueDate) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'ข้อมูลไม่ครบ!',
+      text: 'กรุณากรอกข้อมูลให้ครบถ้วนก่อนส่งนะครับ',
+      confirmButtonColor: '#fbbf24'
+    });
+    return;
+  }
+
+  const data = { subject, type, description, dueDate };
+
+  button.disabled = true;
+  button.textContent = 'กำลังส่ง...';
+
+  try {
+    const response = await fetch('http://localhost:3000/homework', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if (result.status === 'success') {
+      Swal.fire({
+        icon: 'success',
+        title: 'ส่งข้อมูลเรียบร้อยแล้ว!',
+        text: 'ขอบคุณที่แจ้งการบ้านครับ 🎉',
+        confirmButtonColor: '#fbbf24'
+      });
+      e.target.reset();
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'เกิดข้อผิดพลาด',
+        text: result.message || 'ไม่ทราบสาเหตุ',
+        confirmButtonColor: '#f87171'
+      });
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'เกิดข้อผิดพลาด',
+      text: error.message,
+      confirmButtonColor: '#f87171'
+    });
+  } finally {
+    button.disabled = false;
+    button.textContent = 'ส่งข้อมูล';
+  }
+});
+
+  </script>
+</body>
+</html>
