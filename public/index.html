@@ -150,7 +150,7 @@
   button.textContent = 'กำลังส่ง...';
 
   try {
-    const response = await fetch('http://localhost:3000/homework', {
+    const response = await fetch("/homework", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
